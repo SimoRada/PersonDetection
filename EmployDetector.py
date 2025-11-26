@@ -7,10 +7,10 @@ from mediapipe.tasks.python import vision
 
 MARGINX = 10
 MARGINY = 10
-ROW_SIZE = 10  # pixels
+ROW_SIZE = 10  
 FONT_SIZE = 1
 FONT_THICKNESS = 2
-TEXT_COLOR = (0, 255, 0)  # green
+TEXT_COLOR = (0, 255, 0) 
 
 
 def visualize(
@@ -25,13 +25,10 @@ def visualize(
     Image with bounding boxes.
   """
   for detection in detection_result.detections:
-    # Draw bounding_box
     bbox = detection.bounding_box
     start_point = bbox.origin_x, bbox.origin_y
     end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
     cv2.rectangle(image, start_point, end_point, TEXT_COLOR, 3)
-#(bbox.origin_x + bbox.width) 
-    # Draw label and score
     category = detection.categories[0]
     category_name = category.category_name
     probability = round(category.score, 2)
@@ -49,22 +46,17 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH,1920)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT,1080)
 while cap.isOpened():
     ret, frame = cap.read()
-    # STEP 2: Create an ObjectDetector object.
     base_options = python.BaseOptions(model_asset_path='modelHumans2.tflite')
     options = vision.ObjectDetectorOptions(base_options=base_options,
                                         score_threshold=0.5)
     detector = vision.ObjectDetector.create_from_options(options)
 
-    # STEP 3: Load the input image.
-    #image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
     image = mp.Image(
         image_format=mp.ImageFormat.SRGB,
         data=cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
-    # STEP 4: Detect objects in the input image.
     detection_result = detector.detect(image)
 
-    # STEP 5: Process the detection result. In this case, visualize it.
     image_copy = np.copy(image.numpy_view())
     annotated_image = visualize(image_copy, detection_result)
     rgb_annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
@@ -73,3 +65,4 @@ while cap.isOpened():
        break
 cap.release()
 cv2.destryAllWindows()
+
