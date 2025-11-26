@@ -1,6 +1,4 @@
-# Person Detector — MobileNetV2 (TFLite) + MediaPipe
-
-**Professional project README**
+# Person Detector
 
 ## Overview
 
